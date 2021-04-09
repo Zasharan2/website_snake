@@ -4,6 +4,9 @@
     <style>
         body {
             margin: 20px;
+            padding: 5px;
+            font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+            background-color: rgb(200, 255, 200);
         }
     </style>
 
@@ -11,33 +14,64 @@
 <body>
     <h1>Snake</h1>
     <h3>(Zasharan2)</h3>
-    <p>Score: <span id="scoreText">0</span></p>
+    <p id="scoreLine">Score: <span id="scoreText">0</span></p>
     <canvas id="game" width="500px" height="500px" style="border:1px solid #000000;"></canvas>
     <script>
         var c = document.getElementById("game");
         var ctx = c.getContext("2d");
 
         var p = {
-            x: c.width / 2,
-            y: c.height / 2,
+            x: (c.width / 2) - 10,
+            y: (c.height / 2) - 10,
             dir: null,
             alive: true,
-            length: 1
+            length: 1,
+            blocksX: [12],
+            blocksY: [12]
         }
+
+        var apple = {
+            x: null,
+            y: null
+        }
+
+        function generateApple(){
+            apple.x = Math.floor((Math.random() * 25)) * 20;
+            apple.y = Math.floor((Math.random() * 25)) * 20;
+            for(var i = 0; i < p.length; i++){
+                if(apple.x === p.blocksX[i] && apple.y === p.blocksY[i]){
+                    generateApple();
+                }
+            }
+        }
+
+        generateApple();
 
         var keyMap = {
             68: "right",
             65: "left",
             87: "up",
-            83: "down"
+            83: "down",
         }
 
         function keyDown(event){
-            var key = keyMap[event.keyCode]
-            p.dir = key;
+            if(event.keyCode == 68 || event.keyCode == 65 || event.keyCode == 87 || event.keyCode == 83){
+                var key = keyMap[event.keyCode]
+                p.dir = key;
+            }
         }
 
         window.addEventListener("keydown",keyDown,false);
+
+        function testOverlap(){
+            for(var i2 = 0; i2<p.length; i2++){
+                for(var i3 = 0; i3<p.length; i3++){
+                    if(p.blocksX[i2] == p.blocksX[i3] && p.blocksY[i2] == p.blocksY[i3] && i2 != i3){
+                        death();
+                    }
+                }
+            }
+        }
 
         function death(){
             p.alive = false;
@@ -48,27 +82,55 @@
         function update(){
             t++;
 
+            document.querySelector("#scoreText").innerHTML = p.length - 1;
+
+            if(p.alive){
+                document.querySelector("#scoreLine").style.backgroundColor = "transparent"
+            } else {
+                document.querySelector("#scoreLine").style.backgroundColor = "#ff0000"
+            }
+
             if(t>20){
                 if(p.alive){
                     if(p.dir == "right"){
-                        p.x += 20
+                        for(var i = p.length - 1; i > 0; i-=1){
+                            p.blocksX[i] = p.blocksX[i-1];
+                            p.blocksY[i] = p.blocksY[i-1];
+                        }
+                        p.blocksX[0] = p.blocksX[0] + 1;
+                        p.x += 20;
                         if (p.x > c.width){
                             death();
                         }
                     } else {
                         if(p.dir == "left"){
+                            for(var i = p.length - 1; i > 0; i-=1){
+                                p.blocksX[i] = p.blocksX[i-1];
+                                p.blocksY[i] = p.blocksY[i-1];
+                            }
+                            p.blocksX[0] = p.blocksX[0] - 1;
                             p.x -= 20
                             if (p.x < 0){
                                 death();
                             }
                         } else {
                             if(p.dir == "up"){
+                                for(var i = p.length - 1; i > 0; i-=1){
+                                    p.blocksX[i] = p.blocksX[i-1];
+                                    p.blocksY[i] = p.blocksY[i-1];
+                                }
+                                p.blocksY[0] = p.blocksY[0] - 1;
                                 p.y -= 20
                                 if (p.y < 0){
                                     death();
                                 }
                             } else {
                                 if(p.dir == "down"){
+                                    for(var i = p.length - 1; i > 0; i-=1){
+                                        p.blocksX[i] = p.blocksX[i-1];
+                                        p.blocksY[i] = p.blocksY[i-1];
+                                    }
+                                    p.blocksY[0] = p.blocksY[0] + 1;
                                     p.y += 20
                                     if (p.y > c.height){
                                         death();
@@ -86,15 +148,27 @@
                 t=0;
             }
 
+            testOverlap();
+
         }
+
         function draw(){
             ctx.fillStyle = "black";
             ctx.fillRect(0, 0, c.width, c.height);
             if(p.alive){
                 ctx.fillStyle = "lime";
-                ctx.fillRect(p.x-10, p.y-10, 20, 20);
+                for(var i = 0; i < p.length; i++){
+                    ctx.fillRect((p.blocksX[i]*20), (p.blocksY[i]*20), 20, 20);
+                }
+                if(p.x == apple.x && p.y == apple.y){
+                    p.length++;
+                    generateApple();
+                }
+                ctx.fillStyle = "red";
+                ctx.fillRect(apple.x + 5, apple.y + 5, 10, 10);
             }
         }
+
         function loop(timestamp){
             update();
             draw();
@@ -102,6 +176,7 @@
             lastRender = timestamp;
             window.requestAnimationFrame(loop);
         }
+
         var lastRender = 0;
         window.requestAnimationFrame(loop);
     </script>
