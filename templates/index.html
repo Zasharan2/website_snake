@@ -11,30 +11,92 @@
 <body>
     <h1>Snake</h1>
     <h3>(Zasharan2)</h3>
+    <p>Score: <span id="scoreText">0</span></p>
     <canvas id="game" width="500px" height="500px" style="border:1px solid #000000;"></canvas>
     <script>
         var c = document.getElementById("game");
         var ctx = c.getContext("2d");
+
         var p = {
             x: c.width / 2,
-            y: c.height / 2
+            y: c.height / 2,
+            dir: null,
+            alive: true,
+            length: 1
         }
-        function update(progress){
-            p.x += progress
-            if (p.x > c.width){
-                p.x -= c.width;
+
+        var keyMap = {
+            68: "right",
+            65: "left",
+            87: "up",
+            83: "down"
+        }
+
+        function keyDown(event){
+            var key = keyMap[event.keyCode]
+            p.dir = key;
+        }
+
+        window.addEventListener("keydown",keyDown,false);
+
+        function death(){
+            p.alive = false;
+        }
+
+        var t = 0;
+
+        function update(){
+            t++;
+
+            if(t>20){
+                if(p.alive){
+                    if(p.dir == "right"){
+                        p.x += 20
+                        if (p.x > c.width){
+                            death();
+                        }
+                    } else {
+                        if(p.dir == "left"){
+                            p.x -= 20
+                            if (p.x < 0){
+                                death();
+                            }
+                        } else {
+                            if(p.dir == "up"){
+                                p.y -= 20
+                                if (p.y < 0){
+                                    death();
+                                }
+                            } else {
+                                if(p.dir == "down"){
+                                    p.y += 20
+                                    if (p.y > c.height){
+                                        death();
+                                    }
+                                } else {
+                                    if(p.dir == null){
+                                        // Don't move
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+
+                t=0;
             }
+
         }
         function draw(){
             ctx.fillStyle = "black";
             ctx.fillRect(0, 0, c.width, c.height);
-            ctx.fillStyle = "lime";
-            ctx.fillRect(p.x-10, p.y-10, 20, 20);
+            if(p.alive){
+                ctx.fillStyle = "lime";
+                ctx.fillRect(p.x-10, p.y-10, 20, 20);
+            }
         }
         function loop(timestamp){
-            var progress = timestamp - lastRender;
-
-            update(progress);
+            update();
             draw();
 
             lastRender = timestamp;
