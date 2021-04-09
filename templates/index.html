@@ -6,8 +6,41 @@
             margin: 20px;
         }
     </style>
+
 </head>
 <body>
     <h1>Snake</h1>
     <h3>(Zasharan2)</h3>
+    <canvas id="game" width="500px" height="500px" style="border:1px solid #000000;"></canvas>
+    <script>
+        var c = document.getElementById("game");
+        var ctx = c.getContext("2d");
+        var p = {
+            x: c.width / 2,
+            y: c.height / 2
+        }
+        function update(progress){
+            p.x += progress
+            if (p.x > c.width){
+                p.x -= c.width;
+            }
+        }
+        function draw(){
+            ctx.fillStyle = "black";
+            ctx.fillRect(0, 0, c.width, c.height);
+            ctx.fillStyle = "lime";
+            ctx.fillRect(p.x-10, p.y-10, 20, 20);
+        }
+        function loop(timestamp){
+            var progress = timestamp - lastRender;
+
+            update(progress);
+            draw();
+
+            lastRender = timestamp;
+            window.requestAnimationFrame(loop);
+        }
+        var lastRender = 0;
+        window.requestAnimationFrame(loop);
+    </script>
 </body>
