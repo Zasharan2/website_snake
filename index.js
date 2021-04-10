@@ -20,7 +20,7 @@ function generateApple(){
     apple.x = Math.floor((Math.random() * 25)) * 20;
     apple.y = Math.floor((Math.random() * 25)) * 20;
     for(var i4 = 0; i4<p.length; i4++){
-        if(apple.x == p.blocksX[i4] && apple.y == p.blocksY[i4]){
+        if(p.blocksX[i4] == apple.x && p.blocksY[i4] == apple.y){
             generateApple();
         }
     }
