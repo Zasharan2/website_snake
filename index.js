@@ -16,6 +16,8 @@ var apple = {
     y: null
 }
 
+var best = null;
+
 function generateApple(){
     apple.x = Math.floor((Math.random() * 25)) * 20;
     apple.y = Math.floor((Math.random() * 25)) * 20;
@@ -76,7 +78,20 @@ function testOverlap(){
     }
 }
 
+var better;
+
 function death(){
+    if(best==null){
+        best = p.length;
+        better = true;
+    } else {
+        if(p.length > best){
+            best = p.length;
+            better = true;
+        } else {
+            better = false;
+        }
+    }
     p.alive = false;
 }
 
@@ -85,13 +100,36 @@ var t = 0;
 function update(){
     t++;
 
-    document.querySelector("#scoreText").innerHTML = p.length - 1;
+    document.querySelector("#scoreText").innerHTML = p.length;
 
     if(p.alive){
-        document.querySelector("#scoreLine").style.backgroundColor = "transparent"
+        document.querySelector("#scoreLine").style.backgroundColor = "transparent";
     } else {
-        document.querySelector("#scoreLine").style.backgroundColor = "#ff0000"
+        if(best==null){
+            document.querySelector("#bestText").innerHTML = 0;
+            if(better){
+                document.querySelector("#scoreLine").style.backgroundColor = "#00ff00";
+                document.querySelector("#bestLine").style.backgroundColor = "#ff0000";    
+            } else {
+                if(better==false){
+                    document.querySelector("#scoreLine").style.backgroundColor = "#ff0000";
+                    document.querySelector("#bestLine").style.backgroundColor = "#00ff00";
+                }
+            }
+        } else {
+            if(better){
+                document.querySelector("#scoreLine").style.backgroundColor = "#00ff00";
+                document.querySelector("#bestLine").style.backgroundColor = "#ff0000";    
+            } else {
+                if(better==false){
+                    document.querySelector("#scoreLine").style.backgroundColor = "#ff0000";
+                    document.querySelector("#bestLine").style.backgroundColor = "#00ff00";
+                }
+            }
+            document.querySelector("#bestText").innerHTML = best;
+        }
     }
+
 
     for(var i4 = 0; i4<p.length; i4++){
         if(p.blocksX[i4]*20 == apple.x && p.blocksY[i4]*20 == apple.y){
