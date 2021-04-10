@@ -44,8 +44,22 @@ var keyMap = {
 function keyDown(event){
     if(p.alive){
         if(event.keyCode == 68 || event.keyCode == 65 || event.keyCode == 87 || event.keyCode == 83 || event.keyCode == 38 || event.keyCode == 39 || event.keyCode == 40 || event.keyCode == 37){
-            var key = keyMap[event.keyCode]
-            p.dir = key;
+            if((event.keyCode == 68 || event.keyCode == 39) && p.dir != "left"){
+                var key = keyMap[event.keyCode]
+                p.dir = key;
+            }
+            if((event.keyCode == 65 || event.keyCode == 37) && p.dir != "right"){
+                var key = keyMap[event.keyCode]
+                p.dir = key;
+            }
+            if((event.keyCode == 87 || event.keyCode == 38) && p.dir != "down"){
+                var key = keyMap[event.keyCode]
+                p.dir = key;
+            }
+            if((event.keyCode == 83 || event.keyCode == 40) && p.dir != "up"){
+                var key = keyMap[event.keyCode]
+                p.dir = key;
+            }
         }
         if(event.keyCode == 66){
             p.dir = null;
