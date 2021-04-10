@@ -124,6 +124,7 @@ function update(){
 
     if(p.alive){
         document.querySelector("#scoreLine").style.backgroundColor = "transparent";
+        document.querySelector("#bestLine").style.backgroundColor = "transparent";
     } else {
         if(best==null){
             document.querySelector("#bestText").innerHTML = 0;
