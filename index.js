@@ -5,6 +5,7 @@ var p = {
     x: (c.width / 2) - 10,
     y: (c.height / 2) - 10,
     dir: null,
+    movingDir: null,
     alive: true,
     length: 1,
     blocksX: [12],
@@ -44,21 +45,26 @@ var keyMap = {
 function keyDown(event){
     if(p.alive){
         if(event.keyCode == 68 || event.keyCode == 65 || event.keyCode == 87 || event.keyCode == 83 || event.keyCode == 38 || event.keyCode == 39 || event.keyCode == 40 || event.keyCode == 37){
-            if((event.keyCode == 68 || event.keyCode == 39) && p.dir != "left"){
+            if(p.movingDir == null){
                 var key = keyMap[event.keyCode]
                 p.dir = key;
-            }
-            if((event.keyCode == 65 || event.keyCode == 37) && p.dir != "right"){
-                var key = keyMap[event.keyCode]
-                p.dir = key;
-            }
-            if((event.keyCode == 87 || event.keyCode == 38) && p.dir != "down"){
-                var key = keyMap[event.keyCode]
-                p.dir = key;
-            }
-            if((event.keyCode == 83 || event.keyCode == 40) && p.dir != "up"){
-                var key = keyMap[event.keyCode]
-                p.dir = key;
+            } else {
+                if((event.keyCode == 68 || event.keyCode == 39) && p.movingDir != "left"){
+                    var key = keyMap[event.keyCode]
+                    p.dir = key;
+                }
+                if((event.keyCode == 65 || event.keyCode == 37) && p.movingDir != "right"){
+                    var key = keyMap[event.keyCode]
+                    p.dir = key;
+                }
+                if((event.keyCode == 87 || event.keyCode == 38) && p.movingDir != "down"){
+                    var key = keyMap[event.keyCode]
+                    p.dir = key;
+                }
+                if((event.keyCode == 83 || event.keyCode == 40) && p.movingDir != "up"){
+                    var key = keyMap[event.keyCode]
+                    p.dir = key;
+                }
             }
         }
         if(event.keyCode == 66){
@@ -154,6 +160,7 @@ function update(){
     if(t>20){
         if(p.alive){
             if(p.dir == "right"){
+                p.movingDir = "right";
                 for(var i = p.length - 1; i > 0; i-=1){
                     p.blocksX[i] = p.blocksX[i-1];
                     p.blocksY[i] = p.blocksY[i-1];
@@ -165,6 +172,7 @@ function update(){
                 }
             } else {
                 if(p.dir == "left"){
+                    p.movingDir = "left";
                     for(var i = p.length - 1; i > 0; i-=1){
                         p.blocksX[i] = p.blocksX[i-1];
                         p.blocksY[i] = p.blocksY[i-1];
@@ -176,6 +184,7 @@ function update(){
                     }
                 } else {
                     if(p.dir == "up"){
+                        p.movingDir = "up";
                         for(var i = p.length - 1; i > 0; i-=1){
                             p.blocksX[i] = p.blocksX[i-1];
                             p.blocksY[i] = p.blocksY[i-1];
@@ -187,6 +196,7 @@ function update(){
                         }
                     } else {
                         if(p.dir == "down"){
+                            p.movingDir = "down";
                             for(var i = p.length - 1; i > 0; i-=1){
                                 p.blocksX[i] = p.blocksX[i-1];
                                 p.blocksY[i] = p.blocksY[i-1];
