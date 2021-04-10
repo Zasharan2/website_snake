@@ -20,7 +20,7 @@ function generateApple(){
     apple.x = Math.floor((Math.random() * 25)) * 20;
     apple.y = Math.floor((Math.random() * 25)) * 20;
     for(var i4 = 0; i4<p.length; i4++){
-        if(p.blocksX[i4] == apple.x && p.blocksY[i4] == apple.y){
+        if(p.blocksX[i4]*20 == apple.x && p.blocksY[i4]*20 == apple.y){
             generateApple();
         }
     }
@@ -44,6 +44,9 @@ function keyDown(event){
         if(event.keyCode == 68 || event.keyCode == 65 || event.keyCode == 87 || event.keyCode == 83 || event.keyCode == 38 || event.keyCode == 39 || event.keyCode == 40 || event.keyCode == 37){
             var key = keyMap[event.keyCode]
             p.dir = key;
+        }
+        if(event.keyCode == 66){
+            p.dir = null;
         }
     } else {
         if(event.keyCode == 13){
@@ -88,6 +91,12 @@ function update(){
         document.querySelector("#scoreLine").style.backgroundColor = "transparent"
     } else {
         document.querySelector("#scoreLine").style.backgroundColor = "#ff0000"
+    }
+
+    for(var i4 = 0; i4<p.length; i4++){
+        if(p.blocksX[i4]*20 == apple.x && p.blocksY[i4]*20 == apple.y){
+            generateApple();
+        }
     }
 
     if(t>20){
