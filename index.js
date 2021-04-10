@@ -168,7 +168,7 @@ function update(){
                 }
                 p.blocksX[0] = p.blocksX[0] + 1;
                 p.x += 20;
-                if (p.x > c.width){
+                if (p.x > c.width - 20){
                     death();
                 }
             } else {
@@ -204,7 +204,7 @@ function update(){
                             }
                             p.blocksY[0] = p.blocksY[0] + 1;
                             p.y += 20
-                            if (p.y > c.height){
+                            if (p.y > c.height - 20){
                                 death();
                             }
                         } else {
